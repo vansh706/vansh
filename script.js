@@ -1,19 +1,13 @@
-/* ============================================================
-   Online Book Store - JavaScript
-   One script is shared by every frame and every page.  Each
-   setup function first checks whether the elements it needs are
-   present, so nothing runs on a page it does not belong to.
-   ============================================================ */
+
 
 var CART_KEY = "bookstore_cart";
 var USER_KEY = "bookstore_user";
 var REDIRECT_KEY = "bookstore_after_login";
 
-/* Pages that are allowed to be opened inside the right frame. */
+
 var CONTENT_PAGES = ["home.html", "login.html", "registration.html",
                      "catalogue.html", "cart.html"];
 
-/* ---------- 0. Storage helpers (never let the page crash) ---------- */
 
 function storageGet(key) {
     try {
@@ -27,7 +21,6 @@ function storageSet(key, value) {
     try {
         localStorage.setItem(key, value);
     } catch (e) {
-        /* storage blocked - the site still works, it just forgets */
     }
 }
 
@@ -39,7 +32,6 @@ function storageRemove(key) {
     }
 }
 
-/* ---------- 1. Small utilities ---------- */
 
 function currentPage() {
     var path = window.location.pathname;
