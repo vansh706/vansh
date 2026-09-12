@@ -8,12 +8,7 @@
     <link rel="icon" type="image/jpeg" href="glb_logo.jpg">
 </head>
 
-<!--
-    HOME PAGE - three frames (Experiment 1)
-      Top frame   : logo, college name and the main navigation links
-      Left frame  : branch links - CSE, ECE, EEE, CIVIL
-      Right frame : every page opened from the top / left frame loads here.
-                    Initially it shows the description of the web site.
+
 -->
 <body class="frameset">
 
@@ -24,8 +19,7 @@
     <iframe class="frame-right" name="rightFrame" src="home.html" title="Right frame"></iframe>
 
     <script>
-        /* If a content page is opened on its own it sends the visitor back here
-           as index.html?page=login.html, so the frames are never lost. */
+      
         (function () {
             var allowed = [
                 "home.html", "login.html", "registration.html",
