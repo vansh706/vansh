@@ -56,14 +56,10 @@ function money(value) {
     return "$" + rounded;
 }
 
-/* ---------- 2. Keep the three frames together ----------
-   If a content page is opened on its own (for example the browser
-   remembered catalogue.html), send the visitor back to index.html
-   and ask for that page to be loaded in the right frame.          */
 
 function keepInsideFrames() {
     if (window.top !== window.self) {
-        return;                       /* already inside a frame - fine */
+        return;        
     }
 
     var page = currentPage();
@@ -89,8 +85,6 @@ function keepInsideFrames() {
         window.location.replace(url);
     }
 }
-
-/* ---------- 3. Cart storage ---------- */
 
 function getCart() {
     var data = storageGet(CART_KEY);
@@ -171,7 +165,7 @@ function getCartCount() {
     return count;
 }
 
-/* ---------- 4. Login state ---------- */
+
 
 function getUser() {
     return storageGet(USER_KEY);
@@ -184,8 +178,6 @@ function setUser(name) {
 function logoutUser() {
     storageRemove(USER_KEY);
 }
-
-/* ---------- 5. Top frame: cart count and login / logout link ---------- */
 
 function updateCartCount() {
     var link = document.getElementById("nav-cart");
@@ -219,12 +211,12 @@ function updateAuthLink() {
 function setupTopFrame() {
     var link = document.getElementById("nav-login");
     if (!link) {
-        return;                       /* not the top frame */
+        return;                    
     }
 
     link.onclick = function (event) {
         if (!getUser()) {
-            return true;              /* normal "Login" link */
+            return true;            
         }
         event.preventDefault();
         logoutUser();
@@ -236,8 +228,7 @@ function setupTopFrame() {
     updateCartCount();
     updateAuthLink();
 
-    /* The cart is changed in the right frame, so the top frame watches
-       the storage and refreshes itself. */
+ 
     window.onstorage = function () {
         updateCartCount();
         updateAuthLink();
@@ -249,18 +240,17 @@ function setupTopFrame() {
     }, 1500);
 }
 
-/* Ask the right frame to open a page (used by the logout link). */
+
 function loadInRightFrame(page) {
     try {
         if (window.parent && window.parent.frames["rightFrame"]) {
             window.parent.frames["rightFrame"].location.href = page;
         }
     } catch (e) {
-        /* browsers can block frame access on file:// - ignore */
+      
     }
 }
 
-/* ---------- 6. Left frame: highlight the branch that was clicked ---------- */
 
 function setupLeftFrame() {
     var links = document.querySelectorAll(".branch-list a");
@@ -279,7 +269,7 @@ function setupLeftFrame() {
     }
 }
 
-/* ---------- 7. Catalogue page ---------- */
+
 
 function setupCatalogue() {
     var rows = document.querySelectorAll(".book-row");
@@ -287,7 +277,6 @@ function setupCatalogue() {
         return;
     }
 
-    /* 7a. show only the branch asked for by the left frame */
     var branch = queryValue("branch").toUpperCase();
     var blocks = document.querySelectorAll(".branch-block");
     var heading = document.getElementById("catalogue-heading");
@@ -315,7 +304,7 @@ function setupCatalogue() {
         }
     }
 
-    /* 7b. Add to Cart buttons */
+ 
     for (var i = 0; i < rows.length; i++) {
         (function (row) {
             var button = row.querySelector(".add-btn");
@@ -347,7 +336,7 @@ function setupCatalogue() {
     }
 }
 
-/* ---------- 8. Cart page ---------- */
+
 
 function renderCart() {
     var container = document.getElementById("cart-content");
@@ -487,29 +476,27 @@ function setupRegistration() {
         var email = document.getElementById("email").value;
         var phone = document.getElementById("phone").value;
 
-        /* trim the spaces at both ends */
         name = name.replace(/^\s+|\s+$/g, "");
         email = email.replace(/^\s+|\s+$/g, "");
         phone = phone.replace(/^\s+|\s+$/g, "");
 
         var errors = [];
 
-        /* (1) Name - alphabets only and at least 6 characters */
+       
         if (!/^[A-Za-z ]+$/.test(name) || name.replace(/ /g, "").length < 6) {
             errors.push("Name should contain only alphabets and must be at least 6 characters long.");
         }
 
-        /* (2) Password - at least 6 characters */
+     
         if (password.length < 6) {
             errors.push("Password should not be less than 6 characters in length.");
         }
 
-        /* (3) E-mail id - must follow name@domain.com */
         if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
             errors.push("E-mail id is not valid. It must follow the pattern name@domain.com");
         }
 
-        /* (4) Phone Number - exactly 10 digits */
+     
         if (!/^[0-9]{10}$/.test(phone)) {
             errors.push("Phone number should contain 10 digits only.");
         }
@@ -531,7 +518,7 @@ function setupRegistration() {
     };
 }
 
-/* ---------- 10. Login page ---------- */
+
 
 function setupLogin() {
     var form = document.getElementById("login-form");
@@ -566,8 +553,7 @@ function setupLogin() {
     };
 }
 
-/* After a successful login / registration go back to the cart if that is
-   where the visitor came from, otherwise show the home page. */
+
 function redirectAfterAuth() {
     var target = storageGet(REDIRECT_KEY);
 
@@ -578,8 +564,6 @@ function redirectAfterAuth() {
         }, 1000);
     }
 }
-
-/* ---------- 11. Run everything ---------- */
 
 keepInsideFrames();
 
